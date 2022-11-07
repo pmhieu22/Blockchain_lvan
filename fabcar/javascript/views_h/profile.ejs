@@ -1,193 +1,5 @@
 <html>
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    .profile-container {
-        margin-left: 80px;
-        transition: all 0.4s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: #f1f3f4;
-        overflow: hidden;
-    }
-
-    .profile-container.scaledown {
-        margin-left: 380px;
-    }
-
-    .profile-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-width: 400px;
-        padding: 0 20px 30px;
-        background: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
-        border-radius: 6px;
-    }
-
-    .profile-wrapper .avatar {
-        width: 150px;
-        height: 150px;
-        position: relative;
-        border-radius: 50%;
-        margin: auto;
-        /* border-image-slice: 100px; */
-    }
-
-    .profile-wrapper .avatar img {
-        border: 10px solid #f0f0f0;
-        border-radius: 50%;
-        position: absolute;
-        width: 150px;
-        height: 150px;
-        top: -60px;
-    }
-
-    .profile-info {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        width: 100%;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .profile-info p {
-        border-bottom: 2px solid #f2f2f2;
-        padding-bottom: 6px;
-
-    }
-
-    /* The Modal (background) */
-    .modal {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1;
-        /* Sit on top */
-        padding-top: 100px;
-        /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
-    }
-
-    #chat_button {
-        display: flex;
-        justify-content: center;
-        border: none;
-        text-transform: uppercase;
-        border-radius: 8px;
-        background-color: #5959e4;
-        padding: 14px 29px;
-        margin-top: 30px;
-        outline: none;
-        /* text-transform: uppercase; */
-        font-size: 18px;
-        color: #fff;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    #chat_button:hover {
-        opacity: 0.7;
-        transition: all 0.2s ease-in-out;
-    }
-
-    /* Modal Content */
-    .modal-content {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 30%;
-        height: 70%;
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaaaaa;
-        position: absolute;
-        top: 4;
-        right: 6;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    #to_user {
-        border-bottom: 1px solid grey;
-        width: 70%;
-        padding-bottom: 5px;
-        margin-top: 20px;
-        margin-bottom: 15px;
-    }
-    
-    #to_user i {
-        margin-right: 15px;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .mess-text {
-        height: 100%;
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    textarea {
-        resize: none;
-        height: 100%;
-        width: 100%;
-    }
-
-    .group-btn {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .group-btn button {
-        width: 160px;
-        border-radius: 12%;
-        padding: 12px 10px;
-        font-size: 16px;
-        color: white;
-        cursor: pointer;
-    }
-    
-    .group-btn button#button_send_mess_profile {
-        background-color: cadetblue;
-    }
-
-    .group-btn button#button_send_secure_mess_profile {
-        background-color: cadetblue;
-    }    
-</style>
+<link rel="stylesheet" href="./profile.css">
 <%- include('./header')%>
 
     <body onload="loadUI()">
@@ -221,7 +33,7 @@
                         <span class="close">&times;</span>
                         <div id="to_user"></div>
                         <div class="mess-text">
-                            <textarea id="content" name="content" placeholder="Write Message.."></textarea>
+                            <textarea id="content" name="content" placeholder="Write Message.." rows="10"></textarea>
                         </div>
                         <br />
                         <div class="group-btn">
@@ -239,6 +51,7 @@
 <script src="./jquery-3.6.0.js"></script>
 <script>
     var response_init = '<%-data%>';
+    var messagePopup = "";
     //var response_init = window.opener.user_obj;
     var id = document.getElementById('ID');
     var username = document.getElementById('name');
@@ -255,6 +68,15 @@
     var response_json = JSON.parse(response_init);
     //var response_json = response_init;
     function loadUI() {
+        var check = sessionStorage.getItem('login_data');
+        sessionStorage.removeItem('current_partner_id');
+        var check_json = JSON.parse(check);
+        console.log(check_json);
+        if (check_json == null || check_json.isLogin !== true) {
+            sessionStorage.clear();
+            window.location.replace(END_POINT + '/');
+        }
+
         console.log(response_init);
         if (myID_json) {
             id.innerHTML = 'ID: ' + response_json.userID;
@@ -289,12 +111,18 @@
                 'receiver': response_json.userID, 'message': content.value
             });
             content.value = '';
-            alert('Message sent');
+            toastMessage.innerHTML = 'Tin nhắn gửi thành công!';
+            console.log(toastMessage)
+            $(document).ready(function () {
+                $('.toast').toast('hide');
+                $('.toast').toast('show');
+            });
+            modal.style.display = "none";
         }
 
     }
 
-    async function sendSecure(){
+    async function sendSecure() {
         var myID_json = sessionStorage.getItem('login_data');
         var myID = parseInt(JSON.parse(myID_json)['id']);
         var accessToken = JSON.parse(myID_json).accessToken;
@@ -303,59 +131,65 @@
         const options = {
             method: 'GET',
             headers: {
-                'authorization': 'token '+ accessToken,
+                'authorization': 'token ' + accessToken,
             }
         }
-        var res = await fetch('/checkE2ERegisterAPI?senderID='+myID+'&receiverID='+response_json.userID, options);
-        var json_res = await res.json();console.log(json_res);
-        if(sessionStorage.getItem('privKeyRSA'))
-        {
-            if(json_res.data=='ok')
-            {
+        var res = await fetch('/checkE2ERegisterAPI?senderID=' + myID + '&receiverID=' + response_json.userID, options);
+        var json_res = await res.json(); console.log(json_res);
+        if (sessionStorage.getItem('privKeyRSA')) {
+            if (json_res.data == 'ok') {
                 console.log(myID);
-                var privKey = sessionStorage.getItem('privKeyRSA');console.log(privKey);
+                var privKey = sessionStorage.getItem('privKeyRSA'); console.log(privKey);
                 let privKeyRSA = deserializeRSAKey(sessionStorage.getItem('privKeyRSA'));
-                var my_publicKey = cryptico.publicKeyString(privKeyRSA); 
+                var my_publicKey = cryptico.publicKeyString(privKeyRSA);
                 var partner_publicKey = json_res.receiver_publicKeyRSA;
                 console.log(my_publicKey, partner_publicKey);
-                if(content.value!=''&& myID != current_partner){
+                if (content.value != '' && myID != current_partner) {
                     SecurePrivMessageTextObj(content.value, 'secure_private_message', myID, current_partner, my_name,
                         my_publicKey, partner_publicKey, socket, 'secure_sendMess');
-                        content.value = '';
-                    alert('Secured Message sent');
+                    content.value = '';
+                    toastMessage.innerHTML = 'Tin nhắn mã hóa gửi thành công!';
+                    console.log(toastMessage)
+                    $(document).ready(function () {
+                        $('.toast').toast('hide');
+                        $('.toast').toast('show');
+                    });
+                    modal.style.display = "none";
                 }
             }
-            else if(json_res.data=='ng')
-            {
-                alert('Yeu cau doi tac dang ky tin nhan ma hoa!');
+            else if (json_res.data == 'ng') {
+                toastMessage.innerHTML = 'Yêu cầu đăng ký tin nhắn mã hóa!';
+                console.log(toastMessage)
+                $(document).ready(function () {
+                    $('.toast').toast('hide');
+                    $('.toast').toast('show');
+                });
             }
 
         }
-        else if(!sessionStorage.getItem('privKeyRSA'))
-        {
+        else if (!sessionStorage.getItem('privKeyRSA')) {
 
-            if(json_res.data == 'ng')
-            {   
-                if(json_res.unregList.length==1)
-                {
-                    if(json_res.unregList[0].userID==myID)
-                    {
+            if (json_res.data == 'ng') {
+                if (json_res.unregList.length == 1) {
+                    if (json_res.unregList[0].userID == myID) {
                         window.open('/registerE2EService');
                     }
-                    else if(json_res.unregList[0].userID!=myID)
-                    {
-                        alert('Yeu cau doi tac dang ky tin nhan ma hoa!');
+                    else if (json_res.unregList[0].userID != myID) {
+                        toastMessage.innerHTML = 'Yêu cầu đăng ký tin nhắn mã hóa';
+                        console.log(toastMessage)
+                        $(document).ready(function () {
+                            $('.toast').toast('hide');
+                            $('.toast').toast('show');
+                        });
                     }
                 }
-                else if(json_res.unregList.length==2)
-                {
+                else if (json_res.unregList.length == 2) {
                     window.open('/registerE2EService');
                 }
 
             }
-            else if( json_res.data =='ok')
-            {
-                modal.style.display="none";
+            else if (json_res.data == 'ok') {
+                modal.style.display = "none";
                 var privKeyModal = document.getElementById("privKeyModal");
                 privKeyModal.style.display = "block";
             }
@@ -434,5 +268,9 @@
             $('.sidebar').addClass('active');
             $('.profile-container').addClass('scaledown');
         }
+    })
+    $(document).on('click', 'a.close', function () {
+        $(".overlay").html("");
+        $(".overlay").css("display", "none");
     })
 </script>

@@ -6,75 +6,76 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./bootstrap-5.1.3-dist/css/bootstrap.min.css">
-  <script src="./bootstrap-5.1.3-dist/js/jquery.slim.min.js"></script>
+  <!-- <script src="./bootstrap-5.1.3-dist/js/jquery.slim.min.js"></script>
   <script src="./bootstrap-5.1.3-dist/js/popper.min.js"></script>
-  <script src="./bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script> -->
   <link rel="stylesheet" href="./css/groupOptions.css">
   <link rel="stylesheet" href="./fontawesome-free-6.1.1-web/css/all.min.css">
 </head>
 
 <body>
-  <div class="modal-body row" id="group-container">
-    <div class="group-form">
-      <!-- Your first column here -->
-      <label>ADD MEMBER</label>
-      <div class="input-form">
-        <input type="search" id="searchBox" class="form-control rounded input-box" placeholder="Search"
-          aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" onclick="searchUsers()" id="btnSearchUser" class="btn btn-outline-primary input-btn">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </div>
-      <table class="table" id="queryTable">
-        <thead>
-          <tr>
-            <th class="name-tb">Ho ten</th>
-            <th class="unit-tb">Don vi</th>
-            <th class="phone-tb">So dien thoai</th>
-            <th class="role-tb">Quyen</th>
-            <th class="options-tb">Chuc nang</th>
-          </tr>
-        </thead>
-        <tbody>
+  <%- include('./header')%>
+    <div class="modal-body row" id="group-container">
+      <div class="group-form">
+        <!-- Your first column here -->
+        <div class="input-form">
+          <input type="search" id="searchBox" class="group-input" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" />
+          <button type="button" onclick="searchUsers()" id="btnSearchUser" class="group-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <table class="table table-hover" id="queryTable">
+          <thead>
+            <tr>
+              <th scope="col">Họ tên</th>
+              <th scope="col">Đơn vị</th>
+              <th scope="col">Số điện thoại</th>
+              <th scope="col">Quyền</th>
+              <th scope="col">Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
 
-        </tbody>
-      </table>
-    </div>
-    <div class="divider"></div>
-    <div class="group-form">
-      <!-- Your second column here -->
-      <label for="groupName">GROUP NAME</label>
-      <div class="input-form">
-        <input type="text" class="form-control input-box" id="groupName" placeholder="Group Name">
-        <button type="submit" class="btn btn-primary input-btn" id="btnChangeName">Doi ten</button>
+          </tbody>
+        </table>
       </div>
-      <table class="table" id="memberListTable">
-        <thead>
-          <tr>
-            <th class="name-tb">Ho ten</th>
-            <th class="unit-tb">Don vi</th>
-            <th class="phone-tb">So dien thoai</th>
-            <th class="role-tb">Quyen</th>
-            <th class="options-tb">Chuc nang</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div class="divider"></div>
+      <div class="group-form">
+        <!-- Your second column here -->
+        <div class="input-form">
+          <input type="text" class="group-input" id="groupName" placeholder="Group Name">
+          <button type="submit" class="group-btn" id="btnChangeName"><i
+              class="fa-regular fa-pen-to-square"></i></button>
+        </div>
+        <table class="table" id="memberListTable">
+          <thead>
+            <tr>
+              <th scope="col">Họ tên</th>
+              <th scope="col">Đơn vị</th>
+              <th scope="col">Số điện thoại</th>
+              <th scope="col">Quyền</th>
+              <th scope="col">Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
 
-        </tbody>
-      </table>
-      <div class="btn-container">
-        <button type="submit" onclick="applySettings()" class="btn btn-primary" id="btnApply">APPLY</button>
-        <button type="submit" class="btn btn-danger" id="btnDelGrp">DELETE GROUP</button>
-        <button type="submit" class="btn btn-secondary" id="btnLeave">Leave Group</button>
+          </tbody>
+        </table>
+        <div class="btn-container">
+          <button type="submit" onclick="applySettings()" class="btn btn-primary" id="btnApply">Lưu thay đổi</button>
+          <button type="submit" class="btn btn-danger" id="btnDelGrp">Xóa nhóm</button>
+          <button type="submit" class="btn btn-secondary" id="btnLeave">Rời khỏi nhóm</button>
+        </div>
       </div>
     </div>
-  </div>
 
 </body>
 
 </html>
 <script>
   var id_group = '<%=id_group%>';
+  var messagePopup = "";
   var myID_json = sessionStorage.getItem('login_data');
   if (myID_json == null) {
     if (window.confirm('ban khong co quyen truy cap!!!')) {
@@ -111,19 +112,37 @@
       await fetchData();
     }
   }
+
+  window.onload = function checkLogin() {
+    console.log('test');
+    var check = sessionStorage.getItem('login_data');
+    sessionStorage.removeItem('current_partner_id');
+    var check_json = JSON.parse(check);
+    console.log(check_json);
+    if (check_json == null || check_json.isLogin !== true) {
+      sessionStorage.clear();
+      window.location.replace(END_POINT + '/');
+    }
+    else {
+      //sessionStorage.setItem('login_data', check);
+      //localStorage.clear();
+      fetchData();
+    }
+  }
+
   var isAdmin;
   var admin;
   //var optionBTN_enable = '<td><button type="button" class="btn btn-outline-danger delete">Delete</button></td>';
   var optionBTN_enable =
     `<td>
-        <div class="btn-group">
+        <div class="dropdown">
           <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Action
           </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item delete" href="#">Delete</a>
-            <a class="dropdown-item" href="#">Block</a>
-          </div>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item delete" href="#">Xóa</a></li>
+            <li><a class="dropdown-item" href="#">Chặn</a></li>
+          </ul>
         </div>
       </td>
     `;
@@ -166,15 +185,16 @@
       var name = res_json.data[i]['TenDayDu'];
       var dept = res_json.data[i]['TenDonVi'];
       var mobile = res_json.data[i]['Mobile'];
+
       if (isAdmin == 'true') {
         var selectBtn = optionBTN_enable;
       }
-      else if (isAdmin == 'false') {
+      if (isAdmin == 'false') {
         var selectBtn = optionBTN_disable;
       }
 
       if (id == admin) {
-        var admin_element = `<td>Admin</td>`
+        var admin_element = `<th>Admin</th>`
         selectBtn = optionBTN_disable;
       }
       else {
@@ -223,10 +243,62 @@
     memListTable.appendChild(row)
   }
 
+  var searchInput = document.getElementById("searchBox");
+  searchInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("btnSearchUser").click();
+    }
+  });
+
+  var createGroupInput = document.getElementById("groupName");
+  createGroupInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("btnChangeName").click();
+    }
+  });
+
+  function searchFilter(str) {
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+    str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+    str = str.replace(/Đ/g, "D");
+    // Some system encode vietnamese combining accent as individual utf-8 characters
+    // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+    // Remove extra spaces
+    // Bỏ các khoảng trắng liền nhau
+    str = str.split(" ").join("");
+    str = str.replace(/ + /g, " ");
+    str = str.trim();
+    // Remove punctuations
+    // Bỏ dấu câu, kí tự đặc biệt
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+    return str;
+  }
+
   async function searchUsers() {
     try {
+      var child = queryTable.lastElementChild;
+      while (child) {
+        queryTable.removeChild(child);
+        child = queryTable.lastElementChild;
+      }
       var searchBox = document.getElementById('searchBox');
-      var userID = searchBox.value;
+      var userID = searchFilter(searchBox.value);
+      console.log(userID);
       const options = {
         method: 'GET',
         headers: {
@@ -239,6 +311,7 @@
       for (let i = 0; i < res_json.data.length; i++) {
         var newRow = document.createElement('tr');
         var id = res_json.data[i]['id'];
+        console.log(id)
         var name = res_json.data[i]['TenDayDu'];
         var dept = res_json.data[i]['TenDonVi'];
         var mobile = res_json.data[i]['Mobile'];
@@ -257,6 +330,7 @@
         var flag_q = 0;
         var flag_m = 0
         if (queryTable.rows.length > 0) {
+
           for (let j = 0; j < queryTable.rows.length; j++) {
             if (id == queryTable.rows[j].cells[0].innerHTML) {
               flag_q = 1;
@@ -265,14 +339,18 @@
         }
 
         if (memListTable.rows.length > 0) {
+
           for (let k = 0; k < memListTable.rows.length; k++) {
             if (id == memListTable.rows[k].cells[0].innerHTML) {
               flag_m = 1
             }
           }
         }
+        console.log(flag_m)
+        console.log(flag_q)
 
         if (flag_m == 0 && flag_q == 0 && id != myID) {
+          console.log(newRow);
           queryTable.appendChild(newRow);
         }
 
@@ -280,7 +358,17 @@
           queryTable.appendChild(newRow);
         }
 
+        if (flag_m = 1 && queryTable.rows.length === 0) {
+          toastMessage.innerHTML = 'Bạn đã tạo nhóm thành công!';
+          console.log(toastMessage)
+          $(document).ready(function () {
+            $('.toast').toast('hide');
+            $('.toast').toast('show');
+          });
+        }
+
       }
+      searchBox.value = "";
     }
     catch (error) {
       console.log(error);
@@ -311,11 +399,21 @@
       var res = await fetch('/updateGroup', options);
       var json_res = await res.json();
       if (json_res.data == 'ok') {
-        alert('cap nhat thanh cong!!!');
+        toastMessage.innerHTML = 'Cập nhập thành công!';
+        console.log(toastMessage)
+        $(document).ready(function () {
+          $('.toast').toast('hide');
+          $('.toast').toast('show');
+        });
       }
     }
     else if (memListTable.rows.length == 0 || groupName.value == '') {
-      alert('vui long nhap ten nhom va chon thanh vien!!!')
+      toastMessage.innerHTML = 'Yêu cầu nhập tên nhóm và chọn thành viên!';
+      console.log(toastMessage)
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
     }
   }
 
@@ -332,11 +430,17 @@
       },
       body: JSON.stringify({ 'groupName': groupName, 'groupID': groupID })
     }
+    console.log(options)
     var res = await fetch('/changeGroupName', options);
     var json_res = await res.json();
-    console.log(json_res);
     if (json_res.data == 'ok') {
-      alert('doi ten nhom thanh cong!');
+      console.log('test doi ten nhom');
+      toastMessage.innerHTML = 'Bạn đã đổi tên nhóm thành công!';
+      console.log(toastMessage)
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
     }
   })
 
@@ -354,8 +458,13 @@
     var json_res = await res.json();
     if (json_res.data == 'ok') {
       //window.close();
-      alert('ok')
-      window.close()
+      toastMessage.innerHTML = 'Bạn đã rời khỏi nhóm!';
+      console.log(toastMessage)
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
+      window.location.replace("https://127.0.0.1:8082/chat")
     }
     else {
       console.log(json_res);
@@ -375,12 +484,38 @@
     var json_res = await res.json();
     if (json_res.data == 'ok') {
       //window.close();
-      alert('ok')
-      window.close()
+      toastMessage.innerHTML = 'Xóa nhóm thành công!';
+      console.log(toastMessage)
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
     }
     else {
       console.log(json_res);
     }
+  })
+
+  $(document).on('click', '#menu-btn', function () {
+    if ($('.sidebar').hasClass('active')) {
+      $('.sidebar').removeClass('active');
+      $('#group-container').removeClass('scaledown');
+    } else {
+      $('.sidebar').addClass('active');
+      $('#group-container').addClass('scaledown');
+    }
+  })
+
+  $(document).on('click', '.bx-search-alt-2', function () {
+    if (!$('.sidebar').hasClass('active')) {
+      $('.sidebar').addClass('active');
+      $('#group-container').addClass('scaledown');
+    }
+  })
+
+  $(document).on('click', 'a.close', function () {
+    $(".overlay").html("");
+    $(".overlay").css("display", "none");
   })
 
 </script>

@@ -10,297 +10,26 @@
   <link rel="stylesheet" href="./fontawesome-free-6.1.1-web/css/all.min.css">
   <link rel="stylesheet" href="./css/privateKey.css">
   <link rel="stylesheet" href="./css/call.css">
+  <link rel="stylesheet" href="./header.css">
   <!-- ### here -->
   <link rel="stylesheet" href="./bootstrap-5.1.3-dist/css/bootstrap.min.css">
   <script src="./bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
   <!-- ### end here -->
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      width: 100%;
-      /* display: flex; */
-      overflow: hidden;
-    }
-
-    .sidebar {
-      width: 80px;
-      background: #11101d;
-      height: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.4s ease;
-      z-index: 100;
-    }
-
-    .sidebar.active {
-      width: 380px;
-      padding: 6px 14px;
-    }
-
-    .sidebar .logo-content {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-      margin: 15px 0;
-      align-items: center;
-      transition: all 0.4s ease;
-    }
-
-    .sidebar.active .logo-content {
-      justify-content: space-between;
-    }
-
-    .sidebar .logo-content span {
-      display: none;
-      transition: all 0.7s ease;
-      color: #fff;
-      font-size: 25px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .sidebar.active .logo-content span {
-      display: block;
-    }
-
-    .sidebar #menu-btn {
-      font-size: 25px;
-      color: #fff;
-      right: 0;
-    }
-
-    .sidebar ul {
-      margin-top: 20px;
-      padding: 6px 14px;
-    }
-
-    .sidebar.active ul {
-      padding: 0;
-    }
-
-    .sidebar ul li {
-      list-style: none;
-      color: #fff;
-      width: 100%;
-      margin: 0px 5px 0 0;
-      line-height: 50px;
-      position: relative;
-      /* display: flex; */
-    }
-    .sidebar li .tooltip {
-      position: absolute;
-      top: -20px;
-      left: calc(100% + 15px);
-      z-index: 100;
-      background: #fff;
-      font-size: 10px;
-      color: black;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-      padding: 14px 15px;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 400;
-      opacity: 0;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: 0s;
-      width: fit-content;
-      margin: 0;
-      line-height: 0;
-    }
-
-    .sidebar li:hover .tooltip {
-      opacity: 1;
-      pointer-events: auto;
-      transition: all 0.4s ease;
-      top: 40%;
-      transform: translateY(-50%);
-    }
-
-    .sidebar.active li .tooltip {
-      display: none;
-    }
-    .sidebar ul li input {
-      position: absolute;
-      width: 0;
-      border-radius: 12px;
-      min-height: 50px;
-      top: 0;
-      left: 0;
-      outline: none;
-      border: none;
-      background: #1d1b31;
-      padding-left: 50px;
-      font-size: 18px;
-      color: #fff;
-      transition: all 0.3s ease-in-out;
-      /* opacity: 0;
-    visibility: hidden;  */
-    }
-
-    .sidebar.active ul li input {
-      width: 100%;
-      /* opacity: 1;
-    visibility: visible; */
-    }
-
-    .sidebar ul li .bx-search-alt-2 {
-      position: absolute;
-      z-index: 99;
-      color: #fff;
-      top: 0;
-      transition: all 0.4s ease;
-      font-size: 19px;
-    }
-
-    .sidebar ul li i.bx-search-alt-2:hover {
-      background-color: #fff;
-      color: #1d1b31;
-      pointer-events: auto;
-      cursor: pointer;
-    }
-
-    .sidebar.active ul li i.bx-search-alt-2:hover {
-      pointer-events: unset;
-      cursor: unset;
-      background-color: #1d1b31;
-      color: #fff;
-    }
-
-    .a {
-      display: inline-block;
-      max-height: 50px;
-      margin-bottom: 20px;
-    }
-
-    .sidebar ul li a {
-      text-decoration: none;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      border-radius: 12px;
-    }
-
-    /* .sidebar ul li a:hover {
-    background-color: #fff;
-    color: #1d1b31;
-  } */
-
-    .sidebar ul li i {
-      border-radius: 12px;
-      min-width: 50px;
-      min-height: 50px;
-      line-height: 50px;
-      text-align: center;
-      font-size: 17px;
-    }
-
-    .sidebar ul li a:hover {
-      color: #11101d;
-      background-color: #fff;
-      border-radius: 12px;
-      transition: all 0.4s ease;
-    }
-
-    .sidebar.active .link-items {
-      opacity: 1;
-      display: block;
-      min-width: 100%;
-      transform: translateX(0px);
-    }
-
-    .sidebar .link-items {
-      opacity: 0;
-      /* transform: translateX(-50%); */
-      /* transition: all 0.3s ; */
-    }
-
-    .logout-form {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      width: 100%;
-      height: 100%;
-    }
-
-    .logout-form a {
-      color: #fff;
-      text-decoration: none;
-      background-color: #1d1b31;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      margin: 6px 14px;
-    }
-
-    .logout-form i {
-
-      min-width: 50px;
-      min-height: 50px;
-      line-height: 50px;
-      font-size: 20px;
-      text-align: center;
-    }
-
-    .logout-form span {
-      opacity: 0;
-      width: 0%;
-      transition: width 0.4s;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    .sidebar.active .logout-form span {
-      opacity: 1;
-      width: 100%;
-    }
-
-    #exist {
-      display: none;
-    }
-
-    #exist.actice-search {
-      display: block;
-    }
-
-    .modal_incoming_call {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1000;
-        /* Sit on top */
-        padding-top: 100px;
-        /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
-    }
-  </style>
 </head>
 
 <body>
-
+  <div class="toast-container">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Thông báo</strong>
+      </div>
+      <div class="toast-body" id="toast-message">
+      </div>
+    </div>
+  </div>
   <div class="sidebar">
     <div class="logo-content">
-      <span>Vien10</span>
+      <span>Fabric</span>
       <i class="fa-solid fa-bars" id="menu-btn"></i>
     </div>
     <ul>
@@ -334,7 +63,7 @@
 
       </li>
       <li>
-        <a onclick="openSecure()" >
+        <a onclick="openSecure()" class="enrypt-opt">
           <i class="fa-solid fa-unlock-keyhole"></i>
           <span class="link-items">Encrypted</span>
         </a>
@@ -343,7 +72,7 @@
       </li>
     </ul>
     <div class="logout-form">
-      <a href="./">
+      <a onclick="logout()" href="./">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         <span class="logout-text">Logout</span>
       </a>
@@ -351,7 +80,8 @@
   </div>
   </div>
 
-  <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -364,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary">Lưu thay đổi</button>
         </div>
       </div>
     </div>
@@ -376,35 +106,24 @@
     <div class="privKey-modal-content">
       <div class="privKey-modal-header">
         <span class="closeprivKeyModal" id="closeprivKeyModal">&times;</span>
-        <h2>INSERT PRIVATE KEY</h2>
+        <h2>Nhập khóa bí mật</h2>
       </div>
       <div class="privKey-modal-body" id="privKey-body">
-        <div>
-            <textarea id="PrivKeycontent" name="content" placeholder="Write Private Key.."></textarea>
+        <div class="priv-key__input">
+          <textarea id="PrivKeycontent" name="content" placeholder="Nhập khóa bí mật"></textarea>
         </div>
-        <br />
-        <div>
-            <button onclick="checkAndSaveKey()" id="button_send_privKey_header" style="  background-color: #04AA6D;
-                color: white;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;">SEND</button>
-            <button onclick="window.open('/registerE2EService')" id="button_regAgain_privKey_header" style="  background-color: #04AA6D;
-                color: white;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;">DANG KY LAI</button>
+        <div class="encrypt-actions">
+          <button onclick="checkAndSaveKey()" id="button_send_privKey_header">Gửi khóa</button>
+          <button onclick="window.open('/registerE2EService')" id="button_regAgain_privKey_header">Đăng ký lại</button>
         </div>
       </div>
 
     </div>
-  
+
   </div>
 
-              <!-- to show incommming call and accept -->
-              <!-- <div id="answer" class="modal_incoming_call"  >
+  <!-- to show incommming call and accept -->
+  <!-- <div id="answer" class="modal_incoming_call"  >
                 <div class="incomingWrapper">
                     <div class="itemWrapper">
                         <h2>Incomming Call</h2>
@@ -421,36 +140,36 @@
                     </div>
                 </div>
             </div> -->
-            <!-- ### here: modal hien thi thong bao co cuoc goi -->
-            <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title d-flex justify-content-center" id="answerModalLabel"></h5>
-                    <button type="button" class="btn-close" aria-label="Close" onclick="closeModal('answerModal')"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="">
-                      <div class="d-flex justify-content-center">
-                          <h2>Incomming Call</h2>
-                      </div>
-                      <div class="d-flex justify-content-center">
-                          <img id="profileImageA" style="padding: 30px; width: 140px; height: 140px;"
-                              src="./img/profile.png" alt="">
-                      </div>
-                      <div class="d-flex justify-content-center">
-                          <h2 style="line-height: 12px;"><span id="callerName"></span></h2>
-                      </div>
-                      <div class="d-flex justify-content-center p-3">
-                          <button class="btn btn-success" onclick="answer()">Answer</button>
-                          <!-- <button class="btn btn-danger" onclick="stop()">Decline</button> -->
-                      </div>
-                  </div>
-                  </div>
-                </div>
-              </div>
+  <!-- ### here: modal hien thi thong bao co cuoc goi -->
+  <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title d-flex justify-content-center" id="answerModalLabel"></h5>
+          <button type="button" class="btn-close" aria-label="Close" onclick="closeModal('answerModal')"></button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="d-flex justify-content-center">
+              <h2>Incomming Call</h2>
             </div>
-            <!-- ### end here -->
+            <div class="d-flex justify-content-center">
+              <img id="profileImageA" style="padding: 30px; width: 140px; height: 140px;" src="./img/profile.png"
+                alt="">
+            </div>
+            <div class="d-flex justify-content-center">
+              <h2 style="line-height: 12px;"><span id="callerName"></span></h2>
+            </div>
+            <div class="d-flex justify-content-center p-3">
+              <button class="btn btn-success" onclick="answer()">Answer</button>
+              <!-- <button class="btn btn-danger" onclick="stop()">Decline</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ### end here -->
 </body>
 
 </html>
@@ -459,134 +178,138 @@
 <script type="text/javascript" src="./jquery-3.6.0.js"></script>
 <script type="text/javascript" src="./socket.io.min.js"></script>
 <script>
+  var popup = document.getElementById('popup1');
+  var messagePopup = "";
+  var myID_json = sessionStorage.getItem('login_data');
+  var myID = parseInt(JSON.parse(myID_json)['id']);
+  var my_name = JSON.parse(myID_json)['my_username'];
+  var accessToken = JSON.parse(myID_json).accessToken;
+  var refreshToken = JSON.parse(myID_json).refreshToken;
+  var privKeyModal = document.getElementById("privKeyModal");
+  var toastMessage = document.getElementById('toast-message');
 
+  // When the user clicks anywhere outside of the modal, close it
+
+  document.getElementById('closeprivKeyModal').addEventListener('click', function (e) {
+    privKeyModal.style.display = "none";
+  })
+  var socket = io({ auth: { 'token': accessToken } });
+  socket.emit('connected', { 'userID': myID });
+  var incom_call_data;
+  socket.on('newCall', data => {
+    //when other called you
+    console.log(data);
+    //show answer button
+    incom_call_data = data;
+    var otherUser = data.caller;
+    var remoteRTCMessage = data.rtcMessage;
+    sessionStorage.setItem('callerID', data.callerID);
+    document.getElementById("callerName").innerHTML = otherUser;
+    //document.getElementById("call").style.display = "none";
+    // document.getElementById("answer").style.display = "block";
+    // ### here: hien thi modal thong bao khi co cuoc goi         
+    document.getElementById("answerModal").style.display = "block";
+    document.getElementById("answerModal").setAttribute("role", "dialog");
+    document.getElementById("answerModal").setAttribute("aria-modal", "true");
+    document.getElementById("answerModal").removeAttribute("aria-hidden");
+    document.getElementById("answerModal").classList.add("show");
+    // ### end here 
+  })
+  // ### here: dong Modal khi nghe dien
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+    document.getElementById(modalId).removeAttribute("role");
+    document.getElementById(modalId).setAttribute("aria-hidden", "true");
+    document.getElementById(modalId).removeAttribute("aria-modal");
+    document.getElementById(modalId).classList.remove("show");
+    var temp = document.getElementsByClassName("modal-backdrop")[0];
+    if (temp == undefined) return;
+    temp.parentNode.removeChild(temp);
+  }
+  // ### end here
+  function answer() {
+    closeModal("answerModal"); // ### here
+    // document.getElementById("answer").style.display = "none";
+    var callerID = sessionStorage.getItem('callerID');
+    console.log(incom_call_data);
+    var answerWindow = window.open('/call?partnerID=' + callerID + '&docType=private_message&call=callee');
+    answerWindow.incom_call_data = incom_call_data;
+  }
+
+  async function openSecure() {
     var myID_json = sessionStorage.getItem('login_data');
-        var myID = parseInt(JSON.parse(myID_json)['id']);
-        var my_name = JSON.parse(myID_json)['my_username'];
-        var accessToken = JSON.parse(myID_json).accessToken;
-        var refreshToken = JSON.parse(myID_json).refreshToken;
-      var privKeyModal = document.getElementById("privKeyModal");
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-    var privKeyModal = document.getElementById("privKeyModal");
-        if (event.target == privKeyModal) {
-          privKeyModal.style.display = "none";
-        }
-    }
-    document.getElementById('closeprivKeyModal').addEventListener('click', function(e){
-        privKeyModal.style.display = "none";
-    })
-    var socket=io({auth:{'token': accessToken}});
-    socket.emit('connected', {'userID':myID});
-    var incom_call_data;
-    socket.on('newCall', data=>{
-        //when other called you
-        console.log(data);
-        //show answer button
-        incom_call_data=data;
-        var otherUser = data.caller;
-        var remoteRTCMessage = data.rtcMessage;
-        sessionStorage.setItem('callerID', data.callerID);
-        document.getElementById("callerName").innerHTML = otherUser;
-        //document.getElementById("call").style.display = "none";
-        // document.getElementById("answer").style.display = "block";
-        // ### here: hien thi modal thong bao khi co cuoc goi         
-        document.getElementById("answerModal").style.display = "block";
-        document.getElementById("answerModal").setAttribute("role","dialog");
-        document.getElementById("answerModal").setAttribute("aria-modal","true");
-        document.getElementById("answerModal").removeAttribute("aria-hidden");
-        document.getElementById("answerModal").classList.add("show");
-        // ### end here 
-    })
-    // ### here: dong Modal khi nghe dien
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = "none";
-      document.getElementById(modalId).removeAttribute("role");
-      document.getElementById(modalId).setAttribute("aria-hidden","true");
-      document.getElementById(modalId).removeAttribute("aria-modal");
-      document.getElementById(modalId).classList.remove("show");
-      var temp = document.getElementsByClassName("modal-backdrop")[0];
-      if (temp == undefined) return;
-      temp.parentNode.removeChild(temp);
-    }
-    // ### end here
-    function answer()
-    {
-        closeModal("answerModal"); // ### here
-        // document.getElementById("answer").style.display = "none";
-        var callerID = sessionStorage.getItem('callerID');
-        console.log(incom_call_data);
-        var answerWindow= window.open('/call?partnerID='+callerID+'&docType=private_message&call=callee');
-        answerWindow.incom_call_data = incom_call_data;
-    }
+    var myID = parseInt(JSON.parse(myID_json)['id']);
+    var accessToken = JSON.parse(myID_json).accessToken;
+    var refreshToken = JSON.parse(myID_json).refreshToken;
+    if (sessionStorage.getItem('privKeyRSA')) {
+      var privKey = sessionStorage.getItem('privKeyRSA'); console.log(privKey);
+      let privKeyRSA = deserializeRSAKey(privKey);
 
-    async function openSecure(){
-      var myID_json = sessionStorage.getItem('login_data');
-        var myID = parseInt(JSON.parse(myID_json)['id']);
-        var accessToken = JSON.parse(myID_json).accessToken;
-        var refreshToken = JSON.parse(myID_json).refreshToken;
-      if(sessionStorage.getItem('privKeyRSA'))
-      {
-        var privKey = sessionStorage.getItem('privKeyRSA');console.log(privKey);
-        let privKeyRSA = deserializeRSAKey(privKey);
-
-        window.location.href='/secureChat';
-      }
-      else if(!sessionStorage.getItem('privKeyRSA'))
-      {
-        const options = {
-            method: 'GET',
-            headers: {
-                'authorization': 'token '+ accessToken,
-            }
-        }
-        var res = await fetch('/checkE2ERegisterAPI?senderID='+myID+'&receiverID='+000, options);
-        var json_res = await res.json();console.log(json_res)
-        if(json_res.data == 'ng')
-        {
-          window.open('/registerE2EService');
-        }
-        else if( json_res.data =='ok')
-        {
-          //var privKeyModal = document.getElementById("privKeyModal");
-          console.log(privKeyModal);
-          privKeyModal.style.display = "block";
+      window.location.href = '/secureChat';
+    }
+    else if (!sessionStorage.getItem('privKeyRSA')) {
+      const options = {
+        method: 'GET',
+        headers: {
+          'authorization': 'token ' + accessToken,
         }
       }
-    }
-
-    async function checkAndSaveKey()
-    {
-      var privKeyString = document.getElementById('PrivKeycontent').value; console.log(privKeyString);
-      var Bits = 1024; 
- 
-      var MessRSAkey = cryptico.generateRSAKey(privKeyString, Bits); console.log(MessRSAkey);
-
-      var MessRSAkeyPublic = cryptico.publicKeyString(MessRSAkey); console.log(MessRSAkeyPublic)
-
-      let serialKey = serializeRSAKey(MessRSAkey); 
-     
-      const options ={
-              method:'POST',
-              body: JSON.stringify({'publicKeyRSA': MessRSAkeyPublic}),
-                      headers:{
-                          'Content-Type': 'application/json',
-                          'authorization': 'token '+ accessToken,
-                      }
-            }
-      var res = await fetch('/verifyPrivKeyRSA', options);
-      var json_res = await res.json();
-      if(json_res.data=='ok')
-      {
-        console.log('ok');
-        sessionStorage.setItem('privKeyRSA', serialKey);
-        privKeyModal.style.display = "none";
-        window.location.href='/secureChat';
+      var res = await fetch('/checkE2ERegisterAPI?senderID=' + myID + '&receiverID=' + 000, options);
+      var json_res = await res.json(); console.log(json_res)
+      if (json_res.data == 'ng') {
+        window.location.href = '/registerE2EService';
       }
-      else if(json_res.data=='ng')
-      {
-        alert('wrong private Key');
+      else if (json_res.data == 'ok') {
+        //var privKeyModal = document.getElementById("privKeyModal");
+        console.log(privKeyModal);
+        privKeyModal.style.display = "block";
       }
     }
+  }
+
+
+  async function checkAndSaveKey() {
+    var privKeyString = document.getElementById('PrivKeycontent').value; console.log(privKeyString);
+    var Bits = 1024;
+
+    var MessRSAkey = cryptico.generateRSAKey(privKeyString, Bits); console.log(MessRSAkey);
+
+    var MessRSAkeyPublic = cryptico.publicKeyString(MessRSAkey); console.log(MessRSAkeyPublic)
+
+    let serialKey = serializeRSAKey(MessRSAkey);
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ 'publicKeyRSA': MessRSAkeyPublic }),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'token ' + accessToken,
+      }
+    }
+    var res = await fetch('/verifyPrivKeyRSA', options);
+    var json_res = await res.json();
+    if (json_res.data == 'ok') {
+      console.log('ok');
+      sessionStorage.setItem('privKeyRSA', serialKey);
+      privKeyModal.style.display = "none";
+      window.location.href = '/secureChat';
+    }
+    else if (json_res.data == 'ng') {
+      toastMessage.innerHTML = "Khoá bí mật sai. Yêu cầu nhập lại khóa bí mật!";
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
+    };
+  }
+
+  function logout() {
+    sessionStorage.clear();
+  }
+
+  $(document).on('click', 'a.close', function () {
+    $(".overlay").html("");
+    $(".overlay").css("display", "none");
+  })
 
 </script>

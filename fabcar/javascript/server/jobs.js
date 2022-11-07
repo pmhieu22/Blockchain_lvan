@@ -17,4 +17,4 @@ var deleteOldItem = cron.schedule('* * 1 * *', async ()=>{
     console.log('job', Date.now() );
 })*/
 
-module.exports={deleteOldItem};
+// module.exports={deleteOldItem};

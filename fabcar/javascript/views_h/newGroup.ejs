@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Group Option</title>
   <meta charset="utf-8">
@@ -11,27 +12,26 @@
   <link rel="stylesheet" href="./fontawesome-free-6.1.1-web/css/all.min.css">
   <link rel="stylesheet" href="./css/newGroup.css">
 </head>
+
 <body>
   <%- include('./header')%>
-
     <div class="modal-body row" id="group-container">
-      <div class="col-md-6 group-form">
+      <div class="group-form">
         <!-- Your first column here -->
-        <label>SEARCH MEMBER</label>
-        <div class="input-group input-form">
-          <input type="search" id="searchBox" class="form-control rounded input-box" placeholder="Search"
-            aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" onclick="searchUsers()" class="btn btn-outline-primary input-btn">
+        <div class="input-form">
+          <input type="search" id="searchBox" class="group-input" placeholder="Tìm kiếm..." aria-label="Search"
+            aria-describedby="search-addon" />
+          <button type="button" onclick="searchUsers()" class="group-btn" id="searchBtn">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
-        <table class="table" id="queryTable">
+        <table class="table table-hover" id="queryTable">
           <thead>
             <tr>
-              <th class="name-tb">Ho Ten</th>
-              <th class="unit-tb">Don vi</th>
-              <th class="phone-tb">Dien thoai</th>
-              <th class="options-tb">Chuc nang</th>
+              <th scope="col">Họ tên</th>
+              <th scope="col">Đơn vị</th>
+              <th scope="col">Điện thoại</th>
+              <th scope="col">Chức năng</th>
             </tr>
           </thead>
           <tbody>
@@ -39,20 +39,21 @@
         </table>
       </div>
       <div class="divider"></div>
-      <div class="col-md-6 group-form" id="abc">
+      <div class="group-form" id="abc">
         <!-- Your second column here -->
-        <label for="groupName">GROUP NAME</label>
-        <div class="form-group input-form">
-          <input type="text" class="form-control input-box" id="groupName" placeholder="Group Name">
-          <button type="submit" onclick="generateGroup()" class="btn btn-primary input-btn">Submit</button>
+        <div class="input-form">
+          <input type="text" class="group-input" id="groupName" placeholder="Nhập tên nhóm">
+          <button type="submit" onclick="generateGroup()" class="group-btn" id="createGroupBtn">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          </button>
         </div>
-        <table class="table" id="memberListTable">
+        <table class="table table-hover" id="memberListTable">
           <thead>
             <tr>
-              <th class="name-tb">Ho Ten</th>
-              <th class="unit-tb">Don vi</th>
-              <th class="phone-tb">Dien thoai</th>
-              <th class="options-tb">Chuc nang</th>
+              <th scope="col">Họ tên</th>
+              <th scope="col">Đơn vị</th>
+              <th scope="col">Điện thoại</th>
+              <th scope="col">Chức năng</th>
             </tr>
           </thead>
           <tbody>
@@ -61,165 +62,249 @@
       </div>
     </div>
 </body>
+
 </html>
 <script>
-    var myID_json = sessionStorage.getItem('login_data');
-    
-    if(myID_json==null){
-        if(window.confirm('ban khong co quyen truy cap!!!')){
-            window.location.href='/';
-        }
-        else
-        {
-            window.location.href='/';
-        }
+  // var popup = document.getElementById('popup1');
+  var messagePopup = "";
+  var myID_json = sessionStorage.getItem('login_data');
+  var toastMessage = document.getElementById('toast-message');
+  const END_POINT = "https://127.0.0.1:8082"
+
+  if (myID_json == null) {
+    if (window.confirm('ban khong co quyen truy cap!!!')) {
+      window.location.href = '/';
     }
-    else
-    {
-      var myID = JSON.parse(myID_json)['id'];
-        var accessToken = JSON.parse(myID_json).accessToken;
-        var refreshToken = JSON.parse(myID_json).refreshToken;
+    else {
+      window.location.href = '/';
     }
-    
-    
-    window.onload = async function(){
-        const options = {
-            method: 'GET',
-            headers: {
-                'authorization': 'token '+ accessToken
-            }
-        };
-        var res= await fetch('/authenOnLoad', options);
-        var res_json = await res.json();
-        if(!res || res.status!=200)
-        {
-            if(window.confirm('ban khong co quyen truy cap!!!')){
-                window.location.href='/';
-            }
-            else
-            {
-                window.location.href='/';
-            }
-        }
-        
+  }
+  else {
+    var myID = JSON.parse(myID_json)['id'];
+    var accessToken = JSON.parse(myID_json).accessToken;
+    var refreshToken = JSON.parse(myID_json).refreshToken;
+  }
+
+
+  window.onload = async function () {
+    const options = {
+      method: 'GET',
+      headers: {
+        'authorization': 'token ' + accessToken
+      }
+    };
+    var res = await fetch('/authenOnLoad', options);
+    var res_json = await res.json();
+    if (!res || res.status != 200) {
+      if (window.confirm('ban khong co quyen truy cap!!!')) {
+        window.location.href = '/';
+      }
+      else {
+        window.location.href = '/';
+      }
     }
-    $(document).on('click', '.delete', function(){
-        $(this).parents("tr").remove();
+  }
+
+  window.onload = function checkLogin() {
+    console.log('test');
+    var check = sessionStorage.getItem('login_data');
+    sessionStorage.removeItem('current_partner_id');
+    var check_json = JSON.parse(check);
+    console.log(check_json);
+    if (check_json == null || check_json.isLogin !== true) {
+      sessionStorage.clear();
+      window.location.replace(END_POINT + '/');
+    }
+
+  }
+
+  $(document).on('click', '.delete', function () {
+    $(this).parents("tr").remove();
+  })
+  var selectBtn = document.getElementsByClassName('select');
+  var queryTable = document.getElementById('queryTable').getElementsByTagName('tbody')[0];
+  var memListTable = document.getElementById("memberListTable").getElementsByTagName('tbody')[0];
+  for (var i = 0; i < selectBtn.length; i++) {
+    selectBtn[i].addEventListener('click', function (event) {
+      var thisTarget = event.currentTarget;
+      var row = thisTarget.parentNode.parentNode;
+      var lastBTN = row.cells[row.cells.length - 1];
+      lastBTN.innerHTML = `<button type="button" class="btn btn-outline-danger delete">Xóa</button>`;
+      memListTable.appendChild(row);
     })
-    var selectBtn = document.getElementsByClassName('select');
-    var queryTable = document.getElementById('queryTable').getElementsByTagName('tbody')[0];
-    var memListTable = document.getElementById("memberListTable").getElementsByTagName('tbody')[0];
-    for(var i=0; i<selectBtn.length;i++)
-    {
-        selectBtn[i].addEventListener('click', function(event){
-            var thisTarget = event.currentTarget;
-            var row = thisTarget.parentNode.parentNode;
-            var lastBTN = row.cells[row.cells.length-1]; 
-            lastBTN.innerHTML = `<button type="button" class="btn btn-outline-danger delete">Delete</button>`;
-            memListTable.appendChild(row)
-        })
-    }
+  }
 
-    function addNewMember(event){
-        //var thisTarget = event.currentTarget;
-        var row = event.parentNode.parentNode;
-        var lastBTN = row.cells[row.cells.length-1]; 
-        lastBTN.innerHTML = `<button type="button" class="btn btn-outline-danger delete">Delete</button>`;
-        memListTable.appendChild(row)
-    }
+  function addNewMember(event) {
+    //var thisTarget = event.currentTarget;
+    var row = event.parentNode.parentNode;
+    var lastBTN = row.cells[row.cells.length - 1];
+    lastBTN.innerHTML = `<button type="button" class="btn btn-outline-danger delete">Xóa</button>`;
+    memListTable.appendChild(row)
+  }
 
-    async function searchUsers(){
-        var searchBox = document.getElementById('searchBox');
-        var userID = searchBox.value;
-        const options = {
-                  method: 'GET',
-                  headers: {
-                      'authorization': 'token '+ accessToken,
-                  }
-              }
-        var res = await fetch('/searchUserByID?id='+userID, options);
-        var res_json = await res.json();
-        console.log(res_json);
-        for(let i=0; i<res_json.data.length; i++)
-        {
-          var newRow = document.createElement('tr');
-          var id = res_json.data[i]['id'];
-          var name = res_json.data[i]['TenDayDu'];
-          var dept = res_json.data[i]['TenDonVi'];
-          var mobile = res_json.data[i]['Mobile'];
-          var selectBtn =`<td><button type="button" onclick="addNewMember(this)" 
-            class="btn btn-outline-primary select">Select</button></td> `;
-          newRow.innerHTML= 
-          `
-            <td style="display:none;">${id}</td>
+  var searchInput = document.getElementById("searchBox");
+  searchInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("searchBtn").click();
+    }
+  });
+
+  var createGroupInput = document.getElementById("groupName");
+  createGroupInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("createGroupBtn").click();
+    }
+  });
+
+  function searchFilter(str) {
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+    str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+    str = str.replace(/Đ/g, "D");
+    // Some system encode vietnamese combining accent as individual utf-8 characters
+    // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+    // Remove extra spaces
+    // Bỏ các khoảng trắng liền nhau
+    str = str.split(" ").join("");
+    str = str.replace(/ + /g, " ");
+    str = str.trim();
+    // Remove punctuations
+    // Bỏ dấu câu, kí tự đặc biệt
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+    return str;
+  }
+
+  async function searchUsers() {
+    var child = queryTable.lastElementChild;
+    while (child) {
+      queryTable.removeChild(child);
+      child = queryTable.lastElementChild;
+    }
+    var searchBox = document.getElementById('searchBox');
+    var userID = searchFilter(searchBox.value);
+    console.log(userID);
+    const options = {
+      method: 'GET',
+      headers: {
+        'authorization': 'token ' + accessToken,
+      }
+    }
+    var res = await fetch('/searchUserByID?id=' + userID, options);
+    var res_json = await res.json();
+    console.log(res_json);
+    for (let i = 0; i < res_json.data.length; i++) {
+      var newRow = document.createElement('tr');
+      var id = res_json.data[i]['id'];
+      var name = res_json.data[i]['TenDayDu'];
+      var dept = res_json.data[i]['TenDonVi'];
+      var mobile = res_json.data[i]['Mobile'];
+      var selectBtn = `<td><button type="button" onclick="addNewMember(this)" 
+            class="btn btn-outline-primary select">Thêm</button></td> `;
+      newRow.innerHTML =
+        `
+            <td style="display:none;" scope="row">${id}</td>
             <td>${name}</td>
             <td>${dept}</td>
             <td>${mobile}</td>
             ${selectBtn}
           `;
-          console.log(queryTable.rows.length);
-          var flag_q=0;
-          var flag_m =0
-          if(queryTable.rows.length>0){
-            for(let j=0;j<queryTable.rows.length;j++){
-              if(id==queryTable.rows[j].cells[0].innerHTML){
-                flag_q=1;
-              }
-            }
+      var flag_q = 0;
+      var flag_m = 0
+      if (queryTable.rows.length > 0) {
+        for (let j = 0; j < queryTable.rows.length; j++) {
+          if (id == queryTable.rows[j].cells[0].innerHTML) {
+            flag_q = 1;
           }
-
-          if(memListTable.rows.length>0){
-            for(let k=0; k<memListTable.rows.length;k++){
-              if(id== memListTable.rows[k].cells[0].innerHTML){
-                flag_m=1
-              }
-            }
-          }
-            
-          if(flag_m==0 && flag_q==0 && id!=myID){
-              queryTable.appendChild(newRow);
-          }
-          
-          if(queryTable.rows.length==0 && memListTable.rows.length==0 && id!=myID)
-          {
-            queryTable.appendChild(newRow);
-          }
-
-        }
-    }
-    async function generateGroup(){
-      var groupName= document.getElementById('groupName');
-      if(memListTable.rows.length>0 && groupName.value != ''){
-        var listUser = [];
-        for(let i=0;i<memListTable.rows.length;i++){
-          let id = memListTable.rows[i].cells[0].innerHTML;
-          listUser.push(id);
-        }
-        console.log(groupName.value, listUser);
-        const options={
-          method:'POST',
-          headers: {
-              'authorization': 'token '+ accessToken,
-              'Content-Type': 'application/json'
-            },
-          body: JSON.stringify({
-            'groupName': groupName.value,
-            'userID': listUser,
-            'admin': myID
-          })
-        }
-        var res = await fetch('/generateGroup', options);
-        var json_res = await res.json();
-        if(json_res.data=='ok'){
-          memListTable.innerHTML='';
         }
       }
-      else if(memListTable.rows.length==0 || groupName.value == '')
-      {
-        alert('vui long nhap ten nhom va chon thanh vien!!!')
+
+      if (memListTable.rows.length > 0) {
+        for (let k = 0; k < memListTable.rows.length; k++) {
+          if (id == memListTable.rows[k].cells[0].innerHTML) {
+            flag_m = 1
+          }
+        }
+      }
+
+      if (flag_m == 0 && flag_q == 0 && id != myID) {
+        queryTable.appendChild(newRow);
+      }
+
+      if (queryTable.rows.length == 0 && memListTable.rows.length == 0 && id != myID) {
+        queryTable.appendChild(newRow);
+      }
+
+    }
+    searchBox.value = "";
+  }
+  async function generateGroup() {
+    var groupName = document.getElementById('groupName');
+    if (memListTable.rows.length > 0 && groupName.value != '') {
+      var listUser = [];
+      for (let i = 0; i < memListTable.rows.length; i++) {
+        let id = memListTable.rows[i].cells[0].innerHTML;
+        listUser.push(id);
+      }
+      console.log(groupName.value, listUser);
+      const options = {
+        method: 'POST',
+        headers: {
+          'authorization': 'token ' + accessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'groupName': groupName.value,
+          'userID': listUser,
+          'admin': myID
+        })
+      }
+      var res = await fetch('/generateGroup', options);
+      var json_res = await res.json();
+      if (json_res.data == 'ok') {
+        memListTable.innerHTML = '';
+        toastMessage.innerHTML = 'Bạn đã tạo nhóm thành công!';
+        console.log(toastMessage)
+        $(document).ready(function () {
+          $('.toast').toast('hide');
+          $('.toast').toast('show');
+        });
+        // popup.style.display = "block";
+        // messagePopup = "Bạn đã tạo nhóm thành công!";
+        // popup.innerHTML = `
+        //     <div class="popup">
+        //       <h2>Thông báo</h2>
+        //       <a class="close" href="javascript:window.history.back()">&times;</a>
+        //       <div class="content">
+        //           ${messagePopup}
+        //       </div>
+        //     </div>
+        //   `;
       }
     }
-    $(document).on('click', '#menu-btn', function () {
+    else if (memListTable.rows.length == 0 || groupName.value == '') {
+      toastMessage.innerHTML = 'Yêu cầu nhập đủ thông tin nhóm!';
+      console.log(toastMessage)
+      $(document).ready(function () {
+        $('.toast').toast('hide');
+        $('.toast').toast('show');
+      });
+    }
+  }
+  $(document).on('click', '#menu-btn', function () {
     //debugger;
     if ($('.sidebar').hasClass('active')) {
       $('.sidebar').removeClass('active');
@@ -236,5 +321,11 @@
       $('#group-container').addClass('scaledown');
     }
   })
+
+  $(document).on('click', 'a.close', function () {
+    $(".overlay").html("");
+    $(".overlay").css("display", "none");
+  })
+
 
 </script>

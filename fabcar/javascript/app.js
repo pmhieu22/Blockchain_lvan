@@ -37,14 +37,14 @@ const secureChat = require('./server/E2EPackage/secureChat');
 const blockChain = require('./server/blockchain');
 const socketIOFuntion = require('./server/socketIO');
 const commModule = require('./server/COMMPackage/comm');
-const jobs = require('./server/jobs');
+//const jobs = require('./server/jobs');
 
 async function contract(){
     const contract = await blockChain.contract();
     return contract;
 }
 
-jobs.deleteOldItem.start(); 
+//jobs.deleteOldItem.start(); 
 
 //------------Security Zone ------------------------//
 
@@ -410,7 +410,6 @@ const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 app.get('/searchUserByID', authenticateAccessToken, function(req, res){
     try
     {
-        console.log(req.query.id);
         sql.connect(sql_config, function(err){
             if(err){
                 console.log(err);
@@ -599,6 +598,8 @@ app.post('/generateGroup', authenticateAccessToken, async function(req,res){
             new_intUserList.push(userinMongo[j]['userID']);
         }
 
+        console.log("test userlist" ,new_intUserList);
+
         var data = {
             'groupID': groupID,
             'groupName': req.body.groupName,
@@ -715,6 +716,7 @@ app.post('/changeGroupName', authenticateAccessToken, async function(req, res){
 
     }
 });
+
 app.post('/updateGroup', authenticateAccessToken, async function(req, res){
     try
     {

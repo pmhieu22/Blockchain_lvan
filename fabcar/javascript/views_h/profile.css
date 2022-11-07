@@ -1,0 +1,210 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-container {
+    margin-left: 60px;
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f1f3f4;
+    overflow: hidden;
+}
+
+.profile-container.scaledown {
+    margin-left: 300px;
+}
+
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* min-width: 400px; */
+    /* height: 100%; */
+    padding: 0 20px 30px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
+    border-radius: 6px;
+}
+
+.profile-wrapper .avatar {
+    width: 150px;
+    height: 130px;
+    position: relative;
+    border-radius: 50%;
+    margin: auto;
+    /* border-image-slice: 100px; */
+}
+
+.profile-wrapper .avatar img {
+    border: 10px solid #f0f0f0;
+    border-radius: 50%;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: -60px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    /* max-height: 200px; */
+    /* gap: 20px; */
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.profile-info p {
+    border-bottom: 2px solid #f2f2f2;
+    padding-bottom: 6px;
+}
+
+/* The Modal (background) */
+.modal,
+#privKeyModal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    min-height: 100vh;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+#chat_button {
+    display: flex;
+    justify-content: center;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 8px;
+    background-color: #5959e4;
+    padding: 14px 29px;
+    margin-top: 20px;
+    outline: none;
+    /* text-transform: uppercase; */
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+}
+
+#chat_button:hover {
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Modal Content */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: none;
+    border-radius: 12px;
+    max-width: 500px;
+    height: auto;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    position: absolute;
+    top: 4;
+    right: 12px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+#to_user {
+    width: 70%;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+#to_user i {
+    margin-right: 15px;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mess-text {
+    height: 100%;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+textarea {
+    resize: none;
+    height: 100%;
+    width: 100%;
+}
+
+.group-btn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.group-btn button {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 8px;
+    background-color: cadetblue;
+    padding: 15px;
+    margin-bottom: 10px;
+    outline: none;
+    /* text-transform: uppercase; */
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.group-btn button:hover {
+    opacity: 0.8;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    display: none;
+    z-index: 100;
+}
+
